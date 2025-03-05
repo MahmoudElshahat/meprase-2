@@ -18,8 +18,9 @@ trait ProductPrices
 
     protected ProductPrice $priceObject;
 
-    public function price(): ProductPrice
+    public function price()
     {
+        
         return $this->priceObject ??= ProductPrice::make($this);
     }
 

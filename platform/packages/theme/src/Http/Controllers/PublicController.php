@@ -18,9 +18,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class PublicController extends BaseController
-{
+{   
+    
     public function getIndex()
     {
+        
         Theme::addBodyAttributes(['id' => 'page-home']);
 
         if (defined('PAGE_MODULE_SCREEN_NAME') && BaseHelper::getHomepageId()) {
@@ -39,7 +41,8 @@ class PublicController extends BaseController
     }
 
     public function getView(?string $key = null, string $prefix = '')
-    {
+    {   
+        
         if (empty($key)) {
             return $this->getIndex();
         }
@@ -112,6 +115,7 @@ class PublicController extends BaseController
 
     public function getViewWithPrefix(string $prefix, ?string $slug = null)
     {
+      
         return $this->getView($slug, $prefix);
     }
 }

@@ -51,9 +51,6 @@ class CustomerForm extends FormAbstract
                     ->placeholder(trans('plugins/ecommerce::customer.phone_placeholder'))
                     ->maxLength(15)
                     ->colspan(1)
-                    ->addAttribute('id', 'phone-input') // Match with JS
-                    ->addAttribute('class', 'phone-number-field iti') // Ensure styles apply
-                    ->addAttribute('autocomplete', 'tel')
             )
             ->add(
                 'national',

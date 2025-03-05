@@ -25,6 +25,7 @@ class CheckoutForm extends FormFront
         $model = $this->getModel();
         $token = $model['token'];
 
+        // dd($model);
         $this
             ->contentOnly()
             ->setUrl(route('public.checkout.process', $token))
@@ -34,7 +35,7 @@ class CheckoutForm extends FormFront
                 'id' => 'checkout-form',
                 'data-update-url' => route('public.ajax.checkout.update'),
             ])
-            ->add('checkout-token', 'hidden', TextFieldOption::make()->value($token)->maxLength(0))
+            ->add('checkout-token', 'hidden',TextFieldOption::make()->value($token)->maxLength(0))
             ->addWrapper(
                 'main_checkout_product_info',
                 '<div class="row" id="main-checkout-product-info">',

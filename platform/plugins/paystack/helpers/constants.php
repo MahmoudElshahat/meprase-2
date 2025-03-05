@@ -2,4 +2,6 @@
 
 if (! defined('PAYSTACK_PAYMENT_METHOD_NAME')) {
     define('PAYSTACK_PAYMENT_METHOD_NAME', 'paystack');
+    // define('PAYSTACK_PAYMENT_METHOD_NAME', 'geidea');
+
 }

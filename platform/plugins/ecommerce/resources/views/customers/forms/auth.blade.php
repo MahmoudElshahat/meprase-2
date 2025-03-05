@@ -11,8 +11,6 @@
     }
 @endphp
 
-
-
     <style>
         .fix {
             background: #000 !important;
@@ -83,10 +81,6 @@
     @if ($showStart)
         {!! Form::open(Arr::except($formOptions, ['template'])) !!}
     @endif
-    @section('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
-    @endsection
-
 
     @if (session()->has('status'))
         <div role="alert" class="alert alert-success">
@@ -109,6 +103,17 @@
     <div class="row">
         {{ $form->getOpenWrapperFormColumns() }}
 
+        @php
+            $fields = collect($fields);
+
+            // Move 'form_front_form_start' to the beginning
+            $startField = $fields->firstWhere(fn($field) => $field->getName() === 'form_front_form_start');
+            $fields = $fields->reject(fn($field) => $field->getName() === 'form_front_form_start');
+            if ($startField) {
+                $fields->prepend($startField);  // Prepend it at the start
+            }
+        @endphp
+
         @foreach ($fields as $field)
             @continue(in_array($field->getName(), $exclude))
 
@@ -117,31 +122,54 @@
             </div>
         @endforeach
 
+        <!-- Show "Remember Me" and "Forgot Password?" ONLY on Login Page -->
         @if (request()->routeIs('customer.login'))
-            <!-- Login specific fields -->
-        @elseif (request()->routeIs('customer.register'))
-            <div class="col-12 mt-3">
-                {!! Form::checkbox('agree_terms_and_policy', 1, false, ['class' => 'form-check-input']) !!}
-                <label class="text-white">
-                    I agree to the <a href="{{ theme_option('ecommerce_term_and_privacy_policy_url') ?: '#' }}" target="_blank" class="text-white">Terms and Privacy Policy</a>
-                </label>
-            </div>
-        @endif
+        <div class="col-12 text-start">
+            {!! Form::checkbox('remember', 1, false, ['class' => 'form-check-input class="text-white"']) !!}
+            <label>{{ __('Remember me') }}</label>
+        </div>
+        <div class="col-12 text-start">
+            <a href="{{ route('customer.password.reset') }}" class="text-decoration-underline">{{ __('Forgot password?') }}</a>
+        </div>
 
-        <!-- Submit Button -->
+        <!-- Show "Don't have an account? Register" ONLY on Login Page -->
+        <div class="col-12 mt-3 text-center">
+            <a href="{{ route('customer.register') }}" class="text-decoration-underline">{{ __('Don\'t have an account? Register') }}</a>
+        </div>
+
+    @elseif (request()->routeIs('customer.register'))
+        <div class="col-12 mt-3">
+            {!! Form::checkbox('agree_terms_and_policy', 1, false, ['class' => 'form-check-input']) !!}
+            <label class="text-white">
+                I agree to the <a href="{{ theme_option('ecommerce_term_and_privacy_policy_url') ?: '#' }}" target="_blank" class="text-white">Terms and Privacy Policy</a>
+            </label>
+        </div>
+
+    @elseif (request()->routeIs('customer.password.reset'))
+        <div class="col-12 mt-3 text-center">
+            <a href="{{ route('customer.login') }}" class="text-decoration-underline">{{ __('Back to login page') }}</a>
+        </div>
+    @endif
+
+
+
+        <!-- Submit Button: Show different buttons for login, register, and password reset -->
         <div class="col-12 mt-3">
             @if (request()->routeIs('customer.login'))
                 {!! Form::submit(__('Login'), ['class' => 'btn btn-success text-white w-100', 'style' => 'background-color: #006400; border-color: #006400;']) !!}
             @elseif (request()->routeIs('customer.register'))
                 {!! Form::submit(__('Register'), ['class' => 'btn btn-success text-white w-100', 'style' => 'background-color: #006400; border-color: #006400;']) !!}
             @elseif (request()->routeIs('customer.password.reset'))
-                {!! Form::submit(__('Send Password Reset Link'), ['class' => 'btn btn-primary text-white w-100', 'style' => 'background-color: #006400; border-color: #006400;']) !!}
+                {!! Form::submit(__('Send Password Reset Link'), ['class' => 'btn btn-primary text-white w-100' , 'style' => 'background-color: #006400; border-color: #006400;']) !!}
             @endif
         </div>
+
+
 
         {{ $form->getCloseWrapperFormColumns() }}
     </div>
 @endif
+
 
 
 
@@ -166,9 +194,7 @@
     </div>
     </div>
     </div>
-
     <style>
-
 
 
 .auth-card__body form .btn-auth-submit{
@@ -182,104 +208,7 @@
     /* margin-top: 1rem; Equivalent to Bootstrap's mt-3 */
   }
   .auth-card .text-decoration-underline{
-    color: #fff;
+    color: #fff
   }
-  .form-check-input{
-    color: #fff;
-    padding: 3px;
-  }
-
-  #phone-input {
-    width: 100%;
-    /* padding-left: 50px !important; Ensure space for flag */
-    height: 45px;
-}
-
-.iti {
-    width: 100%;
-    position: relative;
-    z-index: 1000; /* Ensures dropdown is above other elements */
-}
-
-.iti__flag-container {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.iti--separate-dial-code .iti__selected-flag {
-    background-color: transparent !important;
-}
-
-.iti input, .iti input[type=tel], .iti input[type=text]{
-    position: initial;
-
-}
-
     </style>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        // Dynamically add CSS
-        var cssLink = document.createElement("link");
-        cssLink.rel = "stylesheet";
-        cssLink.href = "https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/css/intlTelInput.min.css";
-        cssLink.onload = function () {
-            console.log("CSS Loaded. Initializing intlTelInput...");
-            initializeIntlTelInput();
-        };
-        document.head.appendChild(cssLink);
-
-        function initializeIntlTelInput() {
-            setTimeout(function () {
-                var input = document.querySelector("#phone-input");
-
-                if (!input) {
-                    console.error("Phone input field NOT found! Check the ID.");
-                    return;
-                }
-
-
-                var iti = window.intlTelInput(input, {
-                    initialCountry: "us",
-                    separateDialCode: true,
-                    preferredCountries: ["us", "gb", "in", "fr", "de"],
-                    excludeCountries: ["il"],
-                    nationalMode: false,
-                    showFlags: true,
-                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
-                });
-
-
-                // Function to update input with full number
-                function updatePhoneInput() {
-                    let fullNumber = iti.getNumber();
-                    if (fullNumber) {
-                        input.value = fullNumber;
-                    }
-                }
-
-                // Event listeners
-                input.addEventListener("blur", updatePhoneInput);
-                input.addEventListener("keyup", updatePhoneInput);
-                input.addEventListener("countrychange", function () {
-                    setTimeout(updatePhoneInput, 100);
-                });
-
-                // Validate before submitting
-                document.querySelector("form").addEventListener("submit", function (event) {
-                    updatePhoneInput();
-                    if (!iti.isValidNumber()) {
-                        event.preventDefault();
-                        alert("Invalid phone number! Please enter a valid number.");
-                    }
-                });
-
-            }, 500);
-        }
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
-
 @endif

@@ -10,6 +10,7 @@ class ExportProductController extends ExportController
 {
     protected function getExporter(): Exporter
     {
+        
         return ProductExporter::make();
     }
 }

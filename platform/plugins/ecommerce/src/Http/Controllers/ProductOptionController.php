@@ -20,6 +20,8 @@ class ProductOptionController extends BaseController
 {
     protected function breadcrumb(): Breadcrumb
     {
+       
+
         return parent::breadcrumb()
             ->add(trans('plugins/ecommerce::product-option.name'), route('global-option.index'));
     }

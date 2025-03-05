@@ -36,7 +36,8 @@
             && ! in_array(get_application_currency()->title, $supportedCurrencies)
             && ! get_application_currency()->replicate()->newQuery()->whereIn('title', $supportedCurrencies)->exists()
         )
-            @php
+            @php    
+            
                 $currencies = get_all_currencies()->filter(fn ($item) => in_array($item->title, $supportedCurrencies));
             @endphp
 

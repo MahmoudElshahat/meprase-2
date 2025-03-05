@@ -26,11 +26,13 @@ class ProductPrice
 
     public static function make(Product $product): static
     {
+        // dd($product);
         return new static($product);
     }
 
     public function getPrice(bool $includingTaxes = true): float
-    {
+    {   
+        // dd(999);
         if ($includingTaxes) {
             $price = $this->product->front_sale_price_with_taxes != $this->product->price_with_taxes
                 ? $this->product->front_sale_price_with_taxes
@@ -39,18 +41,20 @@ class ProductPrice
             $price = $this->product->isOnSale() ? $this->product->front_sale_price : $this->product->price;
         }
 
+        // dd($this->applyFilters('price', 'value', (float) $price));
         return $this->applyFilters('price', 'value', (float) $price);
     }
 
     public function displayAsText(): string
-    {
+    {   
         $priceText = format_price($this->getPrice());
 
+        // dd(2222,$priceText);
         return $this->applyFilters('price', 'display_as_text', $priceText);
     }
 
     public function displayAsHtml(...$args): string
-    {
+    {   
         return view(EcommerceHelper::viewPath('products.partials.price'), [
             'product' => $this->product,
             ...$args,
@@ -131,7 +135,8 @@ class ProductPrice
     }
 
     protected function applyFilters(string $name, string $kind, mixed $value): mixed
-    {
+    {   
+        // dd($name, $kind, $value,$this->product);
         return apply_filters(
             "product_prices_{$name}_$kind",
             $value,

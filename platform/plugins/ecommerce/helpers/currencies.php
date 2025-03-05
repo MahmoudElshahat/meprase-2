@@ -5,6 +5,7 @@ use Botble\Ecommerce\Models\Currency;
 use Botble\Ecommerce\Supports\CurrencySupport;
 use Illuminate\Support\Collection;
 use Stevebauman\Location\Facades\Location;
+
 if (! function_exists('format_price')) {
     function format_price(
         float|null|string $price,
@@ -12,6 +13,7 @@ if (! function_exists('format_price')) {
         bool $withoutCurrency = false,
         bool $useSymbol = true
     ): string {
+
         if ($currency) {
             if (! $currency instanceof Currency) {
                 $currency = Currency::query()->find($currency);
@@ -33,9 +35,10 @@ if (! function_exists('format_price')) {
                 $currency = $currentCurrency;
             }
         } else {
+            // dd(775555);
             $currency = get_application_currency();
 
-            if (! $currency) {
+            if (!$currency) {
                 return human_price_text($price, $currency);
             }
 
@@ -123,7 +126,8 @@ if (! function_exists('get_current_exchange_rate')) {
 
 if (! function_exists('cms_currency')) {
     function cms_currency(): CurrencySupport
-    {
+    {   
+        
         return CurrencyFacade::getFacadeRoot();
     }
 }
@@ -137,28 +141,39 @@ if (! function_exists('get_all_currencies')) {
 
 if (! function_exists('get_application_currency')) {
     function get_application_currency(): ?Currency
-    {
-        // $currency = cms_currency()->getApplicationCurrency();
-        
+    {   
+
+        // dd(request()->ip());
         $ip = request()->ip() == '127.0.0.1' ? '102.47.16.1' : request()->ip();
         $location = Location::get($ip); // Get user location
-        // dd( $location->countryCode);
+        
         $currency = cms_currency()->getApplicationCurrency(); // Default currency
         
         // Ensure location is detected and currencyCode is set
-        $currencyCode = $location && property_exists($location, 'currencyCode') ? $location->countryCode : 'USD';
+        // $currencyCode = $location && property_exists($location, 'currencyCode') ? $location?->currencyCode : 'USD';
 
+        $currencyCode = 'USD'; // Default to USD
+        // dd($location != null , isset($location->currencyCode));
+        if ($location != null && isset($location->currencyCode)) {
+            $currencyCode = $location->currencyCode;
+            // dd(22222222);
+        }
+
+        // dd($currencyCode);
         // Set currency based on detected country
-        if ($currencyCode === 'EG') {
+        if ($currencyCode == 'EGP') {
             $currency = $currency->where('symbol', 'LE')->first();
         } else {
             $currency = $currency->where('symbol', '$')->first();
         }
+        // dd($location,$currency);
 
+        // dd(999555,$currency);
         if (is_in_admin(true) || ! $currency) {
             $currency = cms_currency()->getDefaultCurrency();
         }
 
+        // dd($currency);
         return $currency;
     }
 }

@@ -1,11 +1,12 @@
 @if (EcommerceHelper::isValidToProcessCheckout())
     <button
-        class="btn payment-checkout-btn payment-checkout-btn-step float-end"
+        class="btn payment-checkoutbtn payment-checkout-btn-step float-end"
         data-processing-text="{{ __('Processing. Please wait...') }}"
         data-error-header="{{ __('Error') }}"
-        type="submit"
+        type="button"
+        onclick="createAndStartPayment(this)"
     >
-        {{ __('Checkout') }}
+        {{ __('Checkout') }}    
     </button>
 @else
     <span class="btn payment-checkout-btn-step float-end disabled">

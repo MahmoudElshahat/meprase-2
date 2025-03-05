@@ -4,6 +4,8 @@
     $priceClassName ??= null;
     $priceOriginalClassName ??= null;
     $priceOriginalWrapperClassName ??= null;
+
+    
 @endphp
 
 <div class="{{ $priceWrapperClassName === null ? 'bb-product-price mb-3' : $priceWrapperClassName }}">

@@ -19,13 +19,12 @@ class CustomerEditRequest extends Request
             'speciality' => ['required', 'max:120'],
             'gender' => ['required', 'in:male,female,other'],
             'phone' => ['required', 'string', 'min:10', 'max:15'],
-            'country_code' => ['nullable', 'string'],
+
             'email' => [
                 'required',
                 new EmailRule(),
                 Rule::unique((new Customer())->getTable(), 'email')->ignore($this->route('customer.id')),
             ],
-            
         ];
 
         if ($this->boolean('is_change_password')) {

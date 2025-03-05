@@ -58,8 +58,7 @@ class Customer extends BaseModel implements
         'nationality',
         'speciality',
         'gender',
-        'country_code',
-        
+        'phone'
     ];
 
     protected $hidden = [

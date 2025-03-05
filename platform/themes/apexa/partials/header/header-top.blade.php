@@ -4,7 +4,6 @@
     $customContainer ??= true;
 
     $displayEcommerceHeaderActions = is_plugin_active('ecommerce') && theme_option('display_ecommerce_header_actions', 'yes') === 'yes';
-    $displayEcommerceHeaderActions=1;
 @endphp
 
 <div @class(['tg-header__top', 'ecommerce' => $displayEcommerceHeaderActions, $wrapperClass ?? null])

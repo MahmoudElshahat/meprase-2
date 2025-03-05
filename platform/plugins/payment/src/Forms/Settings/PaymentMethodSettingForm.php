@@ -14,12 +14,12 @@ class PaymentMethodSettingForm extends SettingForm
 {
     public function setup(): void
     {
+
+        
         parent::setup();
-
         Assets::addStylesDirectly('vendor/core/plugins/payment/css/payment-setting.css');
-
-        $this
-            ->contentOnly()
+       
+        $this->contentOnly()
             ->setSectionTitle(trans('plugins/payment::payment.payment_methods'))
             ->setSectionDescription(trans('plugins/payment::payment.payment_methods_description'))
             ->setValidatorClass(PaymentMethodSettingRequest::class)
@@ -32,5 +32,6 @@ class PaymentMethodSettingForm extends SettingForm
                     ->choices(PaymentMethodEnum::labels())
                     ->selected(PaymentHelper::defaultPaymentMethod()),
             );
+            // dd(PaymentMethodEnum::labels());
     }
 }

@@ -12,16 +12,20 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
 use Unicodeveloper\Paystack\Facades\Paystack;
-
+use Illuminate\Support\Facades\Http;
+use Botble\Payment\Models\Payment;
 class HookServiceProvider extends ServiceProvider
 {
     public function boot(): void
-    {
+    {   
+
+
         add_filter(PAYMENT_FILTER_ADDITIONAL_PAYMENT_METHODS, [$this, 'registerPaystackMethod'], 16, 2);
+        
         $this->app->booted(function () {
             add_filter(PAYMENT_FILTER_AFTER_POST_CHECKOUT, [$this, 'checkoutWithPaystack'], 16, 2);
         });
-
+        
         add_filter(PAYMENT_METHODS_SETTINGS_PAGE, [$this, 'addPaymentSettings'], 97);
 
         add_filter(BASE_FILTER_ENUM_ARRAY, function ($values, $class) {
@@ -101,74 +105,140 @@ class HookServiceProvider extends ServiceProvider
 
     public function addPaymentSettings(?string $settings): string
     {
+        // dd('HookServiceProvider-addPaymentSettings');
+
         return $settings . PaystackPaymentMethodForm::create()->renderForm();
     }
 
     public function registerPaystackMethod(?string $html, array $data): string
     {
+        // dd('HookServiceProvider-registerPaystackMethod');
+
         PaymentMethods::method(PAYSTACK_PAYMENT_METHOD_NAME, [
             'html' => view('plugins/paystack::methods', $data)->render(),
         ]);
-
+        // $test = view('plugins/paystack::methods');
+        // dd('HookServiceProvider-registerPaystackMethod',$test);
         return $html;
     }
 
     public function checkoutWithPaystack(array $data, Request $request): array
-    {
+    {   
+
+        $data['error'] = false;
+        $data['message'] = __('Payment proccess!');
+        // dd('HookServiceProvider-checkoutWithPaystack');
+        // dd($data);
+        return $data;
         if ($data['type'] !== PAYSTACK_PAYMENT_METHOD_NAME) {
             return $data;
         }
+        // $supportedCurrencies = (new PaystackPaymentService())->supportedCurrencyCodes();
+        // $paymentData = apply_filters(PAYMENT_FILTER_PAYMENT_DATA, [], $request);
 
-        $supportedCurrencies = (new PaystackPaymentService())->supportedCurrencyCodes();
+        // if (! in_array($paymentData['currency'], $supportedCurrencies)) {
+        //     $data['error'] = true;
+        //     $data['message'] = __(
+        //         ":name doesn't support :currency. List of currencies supported by :name: :currencies.",
+        //         [
+        //             'name' => 'Paystack',
+        //             'currency' => $paymentData['currency'],
+        //             'currencies' => implode(', ', $supportedCurrencies),
+        //         ]
+        //     );
 
-        $paymentData = apply_filters(PAYMENT_FILTER_PAYMENT_DATA, [], $request);
+        //     return $data;
+        // }
 
-        if (! in_array($paymentData['currency'], $supportedCurrencies)) {
-            $data['error'] = true;
-            $data['message'] = __(
-                ":name doesn't support :currency. List of currencies supported by :name: :currencies.",
-                [
-                    'name' => 'Paystack',
-                    'currency' => $paymentData['currency'],
-                    'currencies' => implode(', ', $supportedCurrencies),
-                ]
-            );
+        //try {
+        // $baseUrl = config('services.giedea.base_url');
+        // $publicKey =config('services.giedea.public_key');
+        // $apiPassword = config('services.giedea.password');
+        // $defualt_currency = config('services.giedea.currency');
 
-            return $data;
-        }
+        // $createRequest =  Http::withHeaders([
+        //         'Authorization' => 'Basic ' . base64_encode("$publicKey:$apiPassword"),
+        //         'Accept' => 'application/json',
+        //         'Content-Type' => 'application/json',
+        // ]);
 
-        try {
-            $requestData = [
-                'reference' => Paystack::genTranxRef(),
-                'quantity' => 1,
-                'currency' => $paymentData['currency'],
-                'amount' => (int) $paymentData['amount'] * 100,
-                'email' => $paymentData['address']['email'],
-                'callback_url' => route('paystack.payment.callback'),
-                'metadata' => json_encode([
-                    'order_id' => $paymentData['order_id'],
-                    'customer_id' => $paymentData['customer_id'],
-                    'customer_type' => $paymentData['customer_type'],
-                ]),
-            ];
+        // // dd($data);
+        $publicKey ='b87c4733-d581-40ca-acb2-f0a301cf9a5f';
+        $ApiPassword = '188cc40f-5f08-4867-8f83-8c33f1042e5f';
+       $createRequest =  Http::withHeaders([
+            'Authorization' => 'Basic ' . base64_encode("$publicKey:$ApiPassword"),
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+       ]);
+        $url = 'https://api.merchant.geidea.net/payment-intent/api/v2/direct/session';
+    $publicKey ='b87c4733-d581-40ca-acb2-f0a301cf9a5f';
+    $ApiPassword = '188cc40f-5f08-4867-8f83-8c33f1042e5f';
+    $orderId = '123';
+    $amount = 100;
+    $currency = 'EGP';
+    $time=now()->format('m/d/Y h:i:s A');
+    $amountStr = number_format($amount,2);
+    $signature = "{$publicKey}{$amountStr}{$currency}{$orderId}{$time}";
+    $hasData = hash_hmac('sha256',$signature,$ApiPassword,true);
+    $hashed_signature = base64_encode($hasData);
+    $data = [   
+        "amount" => $amountStr,
+        "currency" => $currency,
+        "timestamp" => $time,
+        "merchantReferenceId" => $orderId,
+        "signature" => $hashed_signature,
+        "paymentOperation" => "Pay",
+        "appearance" => ["uiMode" => "modal"],
+        "language" => "EN",
+        "callbackUrl" => "https://www.callbackurl.com",
+        "returnUrl" => "https://www.geidea.net",
+        "customer" => [
+            "email" => "customer@email.com",
+            "phoneNumber" => "+966501231231"
+        ],
+        "initiatedBy" => "Internet",
+    ];
 
-            do_action('payment_before_making_api_request', PAYSTACK_PAYMENT_METHOD_NAME, $requestData);
+    // $request= $createRequest->createRequest;
+    $response = $createRequest->post($url, $data);
 
-            $response = Paystack::getAuthorizationResponse($requestData);
+    $responseResult = $response->json();
 
-            do_action('payment_after_api_response', PAYSTACK_PAYMENT_METHOD_NAME, $requestData, (array) $response);
+    // dd($responseResult);
+    if(isset($responseResult['session']['id'])){
 
-            if ($response['status']) {
-                header('Location: ' . $response['data']['authorization_url']);
-                exit;
-            }
+        $sessionId = $responseResult['session']['id'];
 
-            $data['error'] = true;
-            $data['message'] = __('Payment failed!');
-        } catch (Throwable $exception) {
-            $data['error'] = true;
-            $data['message'] = json_encode($exception->getMessage());
-        }
+        $data['sessionId'] = $sessionId;
+        // return response()->json([
+        //     'sessionId' => $sessionId,
+        //     // 'token'=>'vbiejvjkdnvjhdbjkhvnkjdvjkndkjvdjk',
+        // ]);
+    }
+
+        //     if (!isset($response['status'])) {//if rewsponse have status this mean respone is error with 400
+
+        //         $dataToStore = Payment::handle_payment_responce_data($response);
+        //         foreach ($dataToStore as $key => $value) {
+        //             if (is_array($value)) {
+        //                 $dataToStore[$key] = json_encode($value);
+        //             }
+        //         }
+            
+        //         Payment::insert([$dataToStore]);
+        //         header('Location: ' . $responseDetails['link']);
+        //         exit;
+        //     }
+
+        //     return redirect()->back()->with(['error'=>__('Payment failed!')]);
+
+            $data['error'] = false;
+            $data['message'] = __('Payment proccess!');
+
+        // } catch (Throwable $exception) {
+        //     $data['error'] = true;
+        //     $data['message'] = json_encode($exception->getMessage());
+        // }
 
         return $data;
     }

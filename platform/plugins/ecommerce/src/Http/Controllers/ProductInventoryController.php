@@ -12,6 +12,8 @@ class ProductInventoryController extends BaseController
 {
     public function index(ProductInventoryTable $dataTable)
     {
+
+
         $this->pageTitle(trans('plugins/ecommerce::product-inventory.name'));
 
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/product-bulk-editable-table.js');

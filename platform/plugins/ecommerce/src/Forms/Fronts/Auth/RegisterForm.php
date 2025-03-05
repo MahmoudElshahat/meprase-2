@@ -93,32 +93,20 @@ class RegisterForm extends AuthForm
             //         ->addAttribute('class', 'country_code_Alternative')
             //         ->addAttribute('id', 'country-code-Alternative')
             // )
-            // ->add(
-                //     'phone',
-                //     PhoneNumberField::class,
-                //     TextFieldOption::make()
-                //         ->labelAttributes(['class' => 'text-white'])
-                //         ->when(EcommerceHelper::isLoginUsingPhone() || get_ecommerce_setting('make_customer_phone_number_required', false), function (TextFieldOption $fieldOption) {
-                //             $fieldOption
-                //                 ->required()
-                //                 ->label(__('Phone'));
-                //         })
-                //         ->placeholder(__('Phone number'))
-                //         ->addAttribute('autocomplete', 'tel')
-                //         ->addAttribute('class', 'phone-number-field')  // Add class for JS targeting
-                //         ->addAttribute('id', 'phone-input')  // ID for phone input
-            // )//16-2-2025
             ->add(
                 'phone',
                 PhoneNumberField::class,
                 TextFieldOption::make()
-                    ->label(__('Phone Number'))
                     ->labelAttributes(['class' => 'text-white'])
-                    ->required()
-                    ->placeholder(__('Enter your phone number'))
+                    ->when(EcommerceHelper::isLoginUsingPhone() || get_ecommerce_setting('make_customer_phone_number_required', false), function (TextFieldOption $fieldOption) {
+                        $fieldOption
+                            ->required()
+                            ->label(__('Phone'));
+                    })
+                    ->placeholder(__('Phone number'))
                     ->addAttribute('autocomplete', 'tel')
-                    ->addAttribute('id', 'phone-input') // Make sure this ID matches in JS
-                    ->addAttribute('class', 'phone-number-field')
+                    ->addAttribute('class', 'phone-number-field')  // Add class for JS targeting
+                    ->addAttribute('id', 'phone-input')  // ID for phone input
             )
 
 

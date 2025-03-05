@@ -38,29 +38,4 @@
             <a href="{{ route('customer.login') }}" class="btn-login">{{ __('Login') }}</a>
         @endif
     </li>
-    <li class="mobile-only">
-        @if (auth('customer')->check())
-            <a class="truncate-1-custom btn-customer-overview" title="{{ $name = auth('customer')->user()->name }}" href="{{ route('customer.overview') }}">
-                {{ __('Hi, :name', ['name' => $name]) }}
-            </a>
-        @else
-            <a href="{{ route('customer.register') }}" class="btn-login">{{ __('Register') }}</a>
-        @endif
-    </li>
-
 </ul>
-
-<style>
-    @media (min-width: 769px) {  /* Hide on larger screens */
-    .mobile-only {
-        display: none !important;
-    }
-}
-
-@media (max-width: 768px) {  /* Show only on mobile */
-    .mobile-only {
-        display: block !important;
-    }
-}
-
-</style>

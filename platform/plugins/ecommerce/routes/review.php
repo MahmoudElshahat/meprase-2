@@ -5,13 +5,12 @@ use Botble\Ecommerce\Models\Product;
 use Botble\Slug\Facades\SlugHelper;
 use Botble\Theme\Facades\Theme;
 use Illuminate\Support\Facades\Route;
-// use Botble\Ecommerce\Http\Controllers\Fronts\PaymentController;
+use Botble\Ecommerce\Http\Controllers\Fronts\PaymentController;
 
 // Route::get('test-pay',[PaymentController::class,'paymentView']);
 // Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 // Route::post('/create-session', [PaymentController::class, 'createPaymentSession'])->name('create.session');
 // Route::post('/gieda-callBack', [PaymentController::class, 'handleCallback'])->name('gieda.callBack');
-
 
 // Route::get('test-create-session',[PaymentController::class,'createPaymentSession'])->name('test_pay');
 // Route::get('test-create-payment-link',[PaymentController::class,'createPaymentLink']);

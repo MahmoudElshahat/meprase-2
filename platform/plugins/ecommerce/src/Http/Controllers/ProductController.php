@@ -29,12 +29,14 @@ class ProductController extends BaseController
 
     protected function breadcrumb(): Breadcrumb
     {
+       
         return parent::breadcrumb()
             ->add(trans('plugins/ecommerce::products.name'), route('products.index'));
     }
 
     public function index(ProductTable $dataTable)
     {
+
         $this->pageTitle(trans('plugins/ecommerce::products.name'));
 
         Assets::addScripts(['bootstrap-editable'])

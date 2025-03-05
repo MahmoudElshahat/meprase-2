@@ -22,7 +22,6 @@ class CustomerCreateRequest extends Request
             'speciality' => ['required', 'max:120'],
             'gender' => ['required', 'in:male,female,other'],
             'phone' => ['required', 'string', 'min:10', 'max:15'],
-            'country_code' => ['nullable', 'string'],
             'birthday' => 'nullable',
         ];
     }

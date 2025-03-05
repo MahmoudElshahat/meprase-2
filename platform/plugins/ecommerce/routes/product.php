@@ -6,6 +6,8 @@ use Botble\Ecommerce\Http\Controllers\ImportProductController;
 use Illuminate\Support\Facades\Route;
 
 AdminHelper::registerRoutes(function () {
+
+   
     Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'prefix' => 'ecommerce'], function () {
         Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
             Route::resource('', 'ProductController')
@@ -130,6 +132,7 @@ AdminHelper::registerRoutes(function () {
     Route::prefix('tools/data-synchronize')->name('tools.data-synchronize.')->group(function () {
         Route::prefix('export')->name('export.')->group(function () {
             Route::group(['prefix' => 'products', 'as' => 'products.', 'permission' => 'ecommerce.export.products.index'], function () {
+                
                 Route::get('/', [ExportProductController::class, 'index'])->name('index');
                 Route::post('/', [ExportProductController::class, 'store'])->name('store');
             });

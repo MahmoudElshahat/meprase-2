@@ -208,6 +208,7 @@ AdminHelper::registerRoutes(function () {
 Theme::registerRoutes(function () {
     app('events')->listen(ThemeRoutingBeforeEvent::class, function () {
         Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Fronts'], function () {
+
             Route::get(EcommerceHelper::getPageSlug('product_listing'), [
                 'uses' => 'PublicProductController@getProducts',
                 'as' => 'public.products',

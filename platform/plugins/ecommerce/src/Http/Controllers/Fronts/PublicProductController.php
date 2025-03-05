@@ -31,7 +31,9 @@ class PublicProductController extends BaseController
 {
     public function getProducts(Request $request, GetProductService $productService)
     {
+        
         if (! EcommerceHelper::productFilterParamsValidated($request)) {
+            
             return $this
                 ->httpResponse()
                 ->setNextUrl(route('public.products'));
@@ -55,7 +57,7 @@ class PublicProductController extends BaseController
                 'plugins/ecommerce::themes.search'
             )->render();
         }
-
+       
         Theme::breadcrumb()->add(__('Products'), route('public.products'));
 
         $products = $productService->getProduct($request, null, null, $with);
@@ -70,6 +72,8 @@ class PublicProductController extends BaseController
 
         app(GoogleTagManager::class)->viewItemList($products->all(), 'Product List');
 
+        // dd($products);
+        
         return Theme::scope(
             'ecommerce.products',
             compact('products'),

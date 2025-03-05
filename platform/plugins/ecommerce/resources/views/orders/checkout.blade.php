@@ -36,26 +36,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-            
-            toastr.options = {
-              "closeButton": false,
-              "debug": false,
-              "newestOnTop": false,
-              "progressBar": false,
-              "positionClass": "toast-bottom-right",
-              "preventDuplicates": false,
-              "onclick": null,
-              "showDuration": "300",
-              "hideDuration": "1000",
-              "timeOut": "5000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-    
-    
         function createAndStartPayment() {
 
             let token = document.querySelector('input[name="checkout-token"]').value;
@@ -76,13 +56,13 @@
                 if (response.sessionId) {
                     startPayment(response.sessionId);
                 } else {
-
                     toastr.error(response.message)
-                    // alert("Error: "+ response.message);
                 }
             },
             error: function(response) {
+                // alert("Error: " + response);
                 toastr.error(response.message)
+                // console.log('error',response)
             },
             complete: function() {
                 $('.payment-checkout-btn-step').prop("disabled", false).text("{{ __('Checkout') }}"); // Re-enable button after AJAX completes
@@ -97,7 +77,6 @@
 
         let onSuccess = function(data) {
 
-            toastr.success('payment success')
             console.log('payment success: ' + data.responseCode);
 
             // alert('Success:' + '\n' +
@@ -111,7 +90,6 @@
 
         let onError = function(data) {
 
-            toastr.error('payment feiled !!')
             console.log('payment Error: ' + data.responseCode);
             
             // alert('Error:' + '\n' +
@@ -124,8 +102,7 @@
         };
 
         let onCancel = function(data) {
-            
-              toastr.error('payment Cancel !!')
+
             console.log('payment canceled: ' + data.responseCode);
 
             // alert('Payment Cancelled:' + '\n' +

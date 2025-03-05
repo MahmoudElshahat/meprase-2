@@ -8,7 +8,8 @@ use Unicodeveloper\Paystack\Paystack as BasePaystack;
 class Paystack extends BasePaystack
 {
     public function refundOrder($paymentId, $amount)
-    {
+    {   
+        // dd('Paystack-refundOrder');
         $relativeUrl = '/refund';
 
         $data = [
@@ -33,16 +34,21 @@ class Paystack extends BasePaystack
 
     protected function getResponse(): array
     {
+        // dd('Paystack-getResponse');
+
         return json_decode($this->response->getBody(), true);
     }
 
     public function isValid(): bool
     {
+        // dd('Paystack-isValid');
+
         return $this->getResponse()['status'];
     }
 
     public function getPaymentDetails($transactionId)
-    {
+    {   
+        // dd('PaystackPaymentService-getPaymentDetails');
         $relativeUrl = '/transaction/' . $transactionId;
 
         do_action('payment_before_making_api_request', PAYSTACK_PAYMENT_METHOD_NAME, ['transaction_id' => $transactionId]);
@@ -60,6 +66,8 @@ class Paystack extends BasePaystack
 
     public function getListTransactions(array $params = [])
     {
+        // dd('PaystackPaymentService-getListTransactions');
+        
         $relativeUrl = '/transaction' . ($params ? ('?' . http_build_query($params)) : '');
 
         do_action('payment_before_making_api_request', PAYSTACK_PAYMENT_METHOD_NAME, $params);
@@ -76,7 +84,9 @@ class Paystack extends BasePaystack
     }
 
     public function getRefundDetails($refundId)
-    {
+    {   
+        // dd('PaystackPaymentService-getRefundDetails');
+        
         $relativeUrl = '/refund/' . $refundId;
 
         do_action('payment_before_making_api_request', PAYSTACK_PAYMENT_METHOD_NAME, ['refund_id' => $refundId]);

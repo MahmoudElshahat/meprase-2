@@ -14,5 +14,4 @@ Route::group(['controller' => ApexaController::class, 'middleware' => ['web', 'c
         Route::get('download-file', [ApexaController::class, 'downloadFile'])->name('public.download-file');
     });
 });
-
 Theme::routes();

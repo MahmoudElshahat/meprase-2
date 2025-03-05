@@ -1,5 +1,7 @@
 @php
     $isConfigurable = $product->variations()->count() > 0;
+
+   
 @endphp
 
 <div class="card bb-product-item">

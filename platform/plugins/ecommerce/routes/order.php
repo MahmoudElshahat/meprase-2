@@ -172,7 +172,7 @@ Theme::registerRoutes(function () {
                 Route::get('/', [
                     'as' => 'information',
                     'uses' => 'PublicCheckoutController@getCheckout',
-                ]);
+                ])->name('checkout.view');
 
                 Route::post('information', [
                     'as' => 'save-information',

@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Facade;
 class PaymentMethods extends Facade
 {
     protected static function getFacadeAccessor(): string
-    {
+    {   
+     
         return PaymentMethodsSupport::class;
     }
 }
