@@ -1,0 +1,214 @@
+body[dir='rtl'] {
+    .tgmenu__navbar-wrap {
+        ul {
+            margin: 0 125px 0 0;
+        }
+    }
+
+    .tgmenu__main-menu {
+        li.menu-item-has-children > a {
+            &:after {
+                content: unset;
+            }
+
+            &:before {
+                content: '\f107';
+                font-weight: 700;
+                font-family: var(--tg-icon-font-family);
+                color: var(--tg-color-dark-blue);
+                margin-inline-start: 4px;
+                transition: all 0.3s ease-out 0s;
+            }
+        }
+    }
+
+    .btn {
+        &:after {
+            transform: rotate(180deg);
+        }
+    }
+
+    .sidebar__widget-title {
+        &:before {
+            left: unset;
+            right: 0;
+        }
+    }
+
+    .blog-post-thumb {
+        .post-tag {
+            left: unset;
+            right: 18px;
+        }
+    }
+
+    .widget-blog-categories {
+        .sidebar__cat-list {
+            a {
+                i {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .project__details-info {
+        .title {
+            &:before {
+                left: unset;
+                right: 0;
+            }
+        }
+    }
+
+    .fw-title {
+        &:before {
+            left: unset;
+            right: 0;
+        }
+    }
+
+    .sidebar__widget-two {
+        .sidebar__cat-list-two {
+            ul.list-wrap {
+                li {
+                    a {
+                        i {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .tgmenu__navbar-wrap {
+        ul {
+            li .sub-menu {
+                z-index: 20;
+
+                li {
+                    text-align: start;
+                }
+            }
+        }
+    }
+
+    .offCanvas__info {
+        right: unset;
+        left: 0;
+        transform: translateX(-100%);
+
+        &.active {
+            transform: translateX(0);
+        }
+    }
+
+    .search__popup {
+        .search__close {
+            right: unset;
+            left: 2%;
+        }
+    }
+
+    .section-more-btn {
+        text-align: end;
+    }
+
+    .services__tab-wrap {
+        .nav-link {
+            padding: 15px 25px 15px 55px;
+
+            &:after {
+                right: unset;
+                left: 20px;
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .breadcrumb__content {
+        .breadcrumb-item {
+            &:not(:first-child) {
+                &:before {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .widget-newsletter-style-3 {
+        .subscribe-form {
+            button.btn {
+                border-radius: 30px !important;
+            }
+        }
+    }
+
+    .shortcode-about-us-information-style-2 {
+        .services-item {
+            .services__icon-three {
+                &:before {
+                    left: unset;
+                    right: -18px;
+                }
+            }
+        }
+    }
+
+    .shortcode-projects-style-3 {
+        .project__content-three {
+            left: unset;
+            right: 105px;
+        }
+    }
+
+    .shortcode-projects-style-2 {
+        .project__item-four {
+            .project__content-four {
+                .right-arrow {
+                    i {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+    }
+
+    .shortcode-banner-slider {
+        .banner-two-col {
+            .banner-col-2 {
+                right: unset;
+                left: 0;
+
+                .box-button-slider-bottom {
+                    right: auto;
+                    left: 80px;
+                }
+            }
+        }
+    }
+
+    .shortcode-instruction-steps {
+        .card-step {
+            .link-readmore {
+                svg {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .shortcode-simple-slider-style-3 {
+        .box-form-quote {
+            right: unset !important;
+            left: 170px;
+        }
+    }
+
+    .bb-product-attribute-swatch-list.color-swatch {
+        span {
+            top: 13px;
+        }
+    }
+}
